@@ -1,0 +1,18 @@
+const articles=[
+ {category:'债券',source:'固收研究社',accent:'#b33b2e',title:'利率曲线重新变陡，市场正在交易什么？',summary:'资金价格回落以后，期限利差成为交易盘关注的新变量。',sections:['资金面：扰动消退但预期仍有分歧','曲线策略：从方向交易转向结构交易','风险提示：政策信号与供给节奏']},
+ {category:'AI',source:'金融科技前沿',accent:'#1687a7',title:'AI Agent进入投研工作流：从阅读到观点生成',summary:'越来越多的研究团队把模型用于信息筛选、交叉验证和材料整理。',sections:['信息入口：聚合代替重复浏览','协同方式：人负责判断，模型负责整理','落地边界：引用、权限与可追溯性']},
+ {category:'竞品',source:'债市观察',accent:'#2c7a69',title:'同业固收日报如何提高信息密度？',summary:'以读者任务为中心重新组织内容，比简单增加文章数量更有效。',sections:['编辑逻辑：先主题、后文章','阅读路径：摘要与全文并置','产品启示：让历史日报可检索']},
+ {category:'债券',source:'信用漫谈',accent:'#715748',title:'票息策略回归：信用债配置的三个观察维度',summary:'在波动收敛的环境中，主体质量、期限与流动性需要一起评估。',sections:['主体：盈利与再融资能力','期限：久期暴露要与负债匹配','流动性：成交活跃度影响真实收益']},
+ {category:'AI',source:'量子位',accent:'#111',title:'小模型与专业知识库，谁更适合金融场景？',summary:'模型参数并非唯一变量，数据边界和评测集决定了真实体验。',sections:['任务拆分比模型选型更重要','知识库需要持续更新','评测要覆盖错误成本']},
+ {category:'竞品',source:'市场产品志',accent:'#c47d22',title:'一屏读完：资讯产品正在减少无效跳转',summary:'分栏阅读和原文链接并存，兼顾快速浏览与深度阅读。',sections:['列表承担发现任务','侧栏承担理解任务','原文承担核验任务']}
+];
+const days=[['9/12','FRI'],['9/15','MON'],['9/16','TUE'],['9/17','WED']];
+let active='全部',query='',selected=0;
+const $=s=>document.querySelector(s);
+
+function renderDates(){ $('#dates').innerHTML=days.map((d,i)=>`<button class="date-btn ${i===2?'active':''}" data-day="${d[0]}">${d[0]}<span>${d[1]}</span></button>`).join(''); document.querySelectorAll('.date-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.date-btn').forEach(x=>x.classList.remove('active'));btn.classList.add('active');}); }
+function renderFilters(){ const cats=['全部',...new Set(articles.map(a=>a.category))]; $('#filters').innerHTML=cats.map(c=>`<button class="filter ${c===active?'active':''}" data-category="${c}">${c} ${c==='全部'?articles.length:articles.filter(a=>a.category===c).length}</button>`).join(''); document.querySelectorAll('.filter').forEach(btn=>btn.onclick=()=>{active=btn.dataset.category;selected=0;renderFilters();renderArticles();}); }
+function getVisible(){return articles.filter(a=>(active==='全部'||a.category===active)&&(`${a.title}${a.summary}${a.source}`.toLowerCase().includes(query.toLowerCase())))}
+function renderArticles(){const visible=getVisible();$('#resultCount').textContent=`共 ${visible.length} 篇 · 所有内容均为静态测试数据`;$('#articleList').innerHTML=visible.length?visible.map((a,i)=>`<article class="article ${i===selected?'selected':''}" data-index="${i}" tabindex="0"><span class="number">${String(i+1).padStart(2,'0')}</span><span class="article-icon" style="--accent:${a.accent}">${a.category[0]}</span><div><h3>${a.title}</h3><p>${a.summary}</p></div><span class="source">${a.source}<b>阅读预览</b></span></article>`).join(''):'<div class="empty">没有匹配的文章</div>';document.querySelectorAll('.article').forEach(el=>{const show=()=>{selected=Number(el.dataset.index);renderArticles();renderReader(getVisible()[selected]);};el.onclick=show;el.onkeydown=e=>{if(e.key==='Enter')show();};});if(visible.length)renderReader(visible[Math.min(selected,visible.length-1)]);}
+function renderReader(a){if(!a)return;$('#readerBody').innerHTML=`<p class="reader-meta"><span class="status-dot"></span>${a.source} · ${a.category}</p><h2>${a.title}</h2><p class="deck">${a.summary}</p><hr>${a.sections.map((s,i)=>`<h3>${String(i+1).padStart(2,'0')} · ${s}</h3><p class="body">这是用于验证 Gitea 静态发布效果的示例段落。真实版本可在每日生成时将公众号文章摘要、拆解内容和原文地址写入 JSON，再由本页面直接读取展示。</p>`).join('')}<p class="static-note">✓ 当前页面不需要 Django、数据库或后端接口，HTML、CSS、JavaScript 文件即可运行。</p>`;$('#reader').classList.add('open');}
+$('#search').addEventListener('input',e=>{query=e.target.value;selected=0;renderArticles();});$('#closeReader').onclick=()=>$('#reader').classList.remove('open');renderDates();renderFilters();renderArticles();
