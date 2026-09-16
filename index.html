@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="固收公众号日报静态站点发布测试">
+  <title>固收公众号日报 · 静态发布测试</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <aside class="rail" aria-label="日报日期">
+    <a class="brand" href="#top" aria-label="返回顶部">Win.d</a>
+    <div class="rail-rule"></div>
+    <nav class="dates" id="dates"></nav>
+    <span class="rail-note">STATIC<br>PREVIEW</span>
+  </aside>
+
+  <main id="top">
+    <header class="masthead">
+      <div class="identity">
+        <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div>
+          <p class="eyebrow">FIXED INCOME · DAILY READER</p>
+          <h1>固收公众号日报</h1>
+        </div>
+      </div>
+      <div class="today"><span>发布测试</span><strong id="displayDate">2026 / 09 / 16</strong></div>
+    </header>
+
+    <section class="briefing" aria-labelledby="briefing-title">
+      <div class="brief-copy">
+        <p class="kicker">今日主线 <span>三大主题</span></p>
+        <h2 id="briefing-title">市场在重新定价什么？</h2>
+        <div class="topic-lines">
+          <p><b>利率</b> 资金面边际变化与曲线形态成为短期定价核心。</p>
+          <p><b>信用</b> 关注优质主体的票息价值与期限错配机会。</p>
+          <p><b>政策</b> 海内外政策信号交织，风险偏好保持克制。</p>
+        </div>
+      </div>
+      <div class="brief-art" aria-hidden="true">
+        <span class="ghost-day">16</span>
+        <div class="paper p1"><i></i><i></i><i></i></div>
+        <div class="paper p2"><i></i><i></i><i></i></div>
+        <div class="paper p3"><i></i><i></i><i></i></div>
+      </div>
+    </section>
+
+    <section class="stream" aria-labelledby="stream-title">
+      <div class="stream-head">
+        <div><p class="eyebrow">ARTICLE STREAM</p><h2 id="stream-title">今日文章</h2></div>
+        <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索标题、摘要或公众号"></label>
+      </div>
+      <div class="filters" id="filters" aria-label="文章分类"></div>
+      <p class="result-count" id="resultCount" aria-live="polite"></p>
+      <div class="article-list" id="articleList"></div>
+    </section>
+  </main>
+
+  <aside class="reader" id="reader" aria-live="polite">
+    <div class="reader-label">文章预览 <button id="closeReader" aria-label="关闭预览">×</button></div>
+    <div id="readerBody"></div>
+  </aside>
+
+  <script src="./app.js"></script>
+</body>
+</html>
